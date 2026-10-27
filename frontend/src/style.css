@@ -1,0 +1,38 @@
+@import "/styles.css";
+@import "/conversation-history.css";
+@import "/task-details.css";
+@import "/scroll-fix.css";
+@import "/career-workspace.css";
+@import "/ui-polish.css";
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.connection-error { max-width: 520px; }
+.retry-button { margin-top: 18px; padding: 10px 14px; border: 1px solid #39334f; border-radius: 7px; background: #191725; color: #d8d0f5; font: inherit; font-size: 12px; cursor: pointer; }
+.retry-button:hover { border-color: #7563b5; background: #201c32; }
+.retry-button:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+.task-card { display: block; width: 100%; color: inherit; text-align: left; font: inherit; }
+.activity-panel { min-height: 0; overflow-y: auto; overflow-x: hidden; }
+.task-section { min-width: 0; }
+.task-list { min-width: 0; max-height: clamp(140px, 28vh, 280px); overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; padding-right: 2px; }
+.task-card { min-width: 0; overflow: hidden; }
+.task-card-top { display: flex; align-items: flex-start; min-width: 0; gap: 8px; }
+.task-card-title { min-width: 0; flex: 1; }
+.task-card-status { flex: none; white-space: nowrap; }
+.task-card-time { display: block; }
+.task-dialog { position: fixed; inset: 0; width: min(760px, calc(100vw - 32px)); max-height: min(84vh, 900px); margin: auto; padding: 0; border: 1px solid #343b49; border-radius: 14px; background: #10141c; color: var(--text); box-shadow: 0 24px 90px #000b; }
+.task-dialog::backdrop { background: #05070bb8; backdrop-filter: blur(5px); }
+.task-dialog-shell { max-height: inherit; overflow: auto; }
+.task-dialog-header { display:flex; align-items:center; justify-content:space-between; padding:20px 24px; border-bottom:1px solid var(--line); }
+.task-dialog-header h2 { margin:6px 0 0; font-size:18px; }
+.task-dialog-content { padding:20px 24px 24px; }
+.detail-meta { display:flex; gap:12px; margin-bottom:18px; color:var(--muted); font-size:12px; }
+.detail-status { color:#b4a1fc; }
+.detail-block { margin-top:17px; padding:15px; border:1px solid var(--line); border-radius:9px; background:#121720; }
+.detail-block h3 { margin:0 0 9px; color:#c7c1df; font-size:13px; }
+.detail-block p,.detail-block li,.detail-event span { color:#bbc0cc; font-size:13px; line-height:1.7; white-space:pre-wrap; overflow-wrap:anywhere; }
+.detail-block p { margin:0; }
+.detail-block ol { padding-left:20px; }
+.detail-events { display:grid; gap:12px; }
+.detail-event b { display:block; margin-bottom:3px; color:#a99adc; font-size:11px; }
+.detail-event span { display:block; }
+@media (max-width:700px) { .task-dialog-content { padding:14px; } .task-dialog-header { padding:16px; } }

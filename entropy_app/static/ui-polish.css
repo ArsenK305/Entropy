@@ -1,0 +1,118 @@
+.mobile-new-chat {
+  display: none;
+}
+
+.new-chat {
+  min-height: 43px;
+  height: auto;
+  font-size: 13px;
+}
+
+.new-chat kbd { font-size: 10px; }
+.side-label { font-size: 10px; }
+.nav-item { min-height: 39px; height: auto; font-size: 13px; }
+.agent-name, .profile-name { font-size: 12px; }
+.agent-name small, .profile-name small { font-size: 10px; }
+.mode-card b { font-size: 11px; }
+.mode-card small { font-size: 10px; }
+.breadcrumb { font-size: 12px; }
+.demo-pill { font-size: 9px; }
+.token-settings { font-size: 11px; }
+.token-settings summary b { font-size: 11px; }
+.welcome-copy { font-size: 13px; line-height: 1.75; }
+.suggestion b { font-size: 11px; }
+.suggestion small { font-size: 10px; }
+.message-meta { font-size: 10px; }
+.message-content { font-size: 14px; line-height: 1.75; }
+.composer textarea { font-size: 14px; }
+.composer-hints { font-size: 10px; }
+.send-button { font-size: 11px; }
+.disclaimer { font-size: 9px; }
+.panel-kicker, .section-heading { font-size: 9px; }
+.panel-status { font-size: 10px; }
+.activity-copy { font-size: 10px; }
+.activity-copy b { font-size: 11px; }
+.task-card-title { font-size: 11px; }
+.task-card-status, .task-card-time { font-size: 9px; }
+
+.token-setting-control {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+  width: 190px;
+}
+
+.token-popover { width: min(360px, calc(100vw - 28px)); }
+.token-setting-control input[type="number"] { width: 100%; font-size: 12px; }
+.token-setting-control input[type="range"] {
+  width: 100%;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.token-slider { width: 100%; margin: 2px 0 0; accent-color: #9d83ff; cursor: ew-resize; }
+.workspace-career .token-slider { accent-color: #71d9da; }
+.token-setting-row label { font-size: 12px; }
+.token-popover > small { font-size: 10px; }
+.token-popover p { font-size: 10px; }
+.career-note, .career-welcome .career-note { font-size: 11px; }
+
+@media (max-width: 850px) {
+  .compact-workspace-switcher button { font-size: 12px; }
+}
+
+@media (max-width: 700px) {
+  .topbar {
+    min-height: 62px;
+    height: auto;
+    padding: 8px 14px;
+    gap: 8px;
+  }
+
+  .mobile-new-chat {
+    display: grid;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border: 1px solid #343244;
+    border-radius: 8px;
+    background: #171622;
+    color: #c5b5ff;
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .workspace-career .mobile-new-chat {
+    border-color: rgba(92, 185, 180, .42);
+    background: #142326;
+    color: #8bd8d2;
+  }
+
+  .compact-workspace-switcher { padding: 3px; }
+  .compact-workspace-switcher button { padding: 8px 10px; font-size: 12px; }
+  .top-actions { gap: 7px; }
+  .demo-pill { padding: 5px 7px; font-size: 8px; }
+  .token-settings summary { gap: 5px; padding: 7px; font-size: 10px; }
+  .token-settings summary b { font-size: 10px; }
+  .welcome { margin: 26px auto 22px; }
+  .welcome h1 { font-size: clamp(31px, 7vw, 38px); }
+  .welcome-copy { max-width: 480px; font-size: 14px; }
+  .eyebrow { font-size: 9px; }
+  .suggestion b { font-size: 12px; }
+  .suggestion small { font-size: 11px; }
+  .conversation { padding: 20px 18px; }
+  .message-content { font-size: 15px; }
+  .composer textarea { min-height: 56px; font-size: 15px; }
+  .composer-hints { font-size: 10px; }
+  .send-button { min-height: 36px; font-size: 12px; }
+  .disclaimer { font-size: 10px; line-height: 1.5; }
+}
+
+@media (max-width: 430px) {
+  .topbar { flex-wrap: wrap; }
+  .compact-workspace-switcher { order: 0; }
+  .mobile-new-chat { order: 1; }
+  .top-actions { order: 2; margin-left: auto; }
+}

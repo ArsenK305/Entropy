@@ -1,0 +1,63 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+body {
+  overflow: hidden;
+}
+
+.app-shell {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.sidebar,
+.main-area,
+.activity-panel {
+  min-height: 0;
+}
+
+.main-area {
+  overflow: hidden;
+}
+
+.conversation {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-color: #667083 #11141b;
+  scrollbar-width: auto;
+}
+
+.conversation:focus-visible {
+  outline: 1px solid #5f5684;
+  outline-offset: -2px;
+}
+
+.conversation::-webkit-scrollbar {
+  width: 10px;
+}
+
+.conversation::-webkit-scrollbar-track {
+  background: #11141b;
+}
+
+.conversation::-webkit-scrollbar-thumb {
+  border: 2px solid #11141b;
+  border-radius: 8px;
+  background: #667083;
+}
+
+@media (max-width: 700px) {
+  .app-shell {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+  }
+}

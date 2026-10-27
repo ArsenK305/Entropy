@@ -1,0 +1,14 @@
+.sidebar{overflow-y:auto;scrollbar-width:thin;scrollbar-color:#303545 transparent}
+.sidebar-history{display:flex;flex:1;flex-direction:column;min-height:110px;margin-bottom:20px;overflow:hidden}
+.history-heading{display:flex;flex:none;align-items:center;justify-content:space-between;margin:23px 7px 7px}
+.history-heading .side-label{margin:0}
+.history-count{color:#687080;font:9px var(--mono)}
+.conversation-list{display:grid;flex:1;align-content:start;gap:3px;min-height:0;max-height:none;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#303545 transparent}
+.conversation-item{display:flex;align-items:center;gap:8px;min-width:0;padding:7px 8px;border:1px solid transparent;border-radius:6px;background:transparent;color:#a2a7b4;text-align:left;cursor:pointer}
+.conversation-item:hover{background:#141720;color:#e1e2e9}
+.conversation-item.active{border-color:#302b43;background:#191722;color:#efeff7;box-shadow:inset 2px 0 var(--violet)}
+.conversation-item-title{overflow:hidden;flex:1;font-size:9px;white-space:nowrap;text-overflow:ellipsis}
+.conversation-item-date{flex:none;color:#606777;font:7px var(--mono)}
+.conversation-empty{padding:8px;color:#686f7e;font-size:8px;line-height:1.5}
+.message.veltrics .message-avatar{border-color:#315c61;background:#152a30;color:#8ed9d2}
+.message.veltrics .message-content{border-color:#294247;background:linear-gradient(120deg,#10191d,#12171d)}
