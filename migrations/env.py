@@ -2,6 +2,15 @@ from __future__ import annotations
 
 import os
 from logging.config import fileConfig
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from entropy_app.dotenv import load_env_file
+
+load_env_file(ROOT / ".env")
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool

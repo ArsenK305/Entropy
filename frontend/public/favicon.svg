@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="entropy" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#c3b2ff" />
+      <stop offset="1" stop-color="#7659df" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#0e1118" />
+  <g transform="rotate(-24 32 32)" fill="url(#entropy)">
+    <rect x="18" y="26" width="6" height="15" rx="3" opacity=".65" />
+    <rect x="29" y="18" width="7" height="29" rx="3.5" />
+    <rect x="41" y="23" width="6" height="21" rx="3" opacity=".82" />
+  </g>
+</svg>

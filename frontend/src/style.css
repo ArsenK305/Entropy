@@ -4,12 +4,74 @@
 @import "/scroll-fix.css";
 @import "/career-workspace.css";
 @import "/ui-polish.css";
+@import "/workspace-controls.css";
+
+.rich-text a {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--cyan) 50%, transparent);
+  text-underline-offset: 3px;
+}
+
+.rich-text a:hover {
+  color: #a7f1ee;
+  text-decoration-color: currentColor;
+}
+
+.rich-sources {
+  margin-top: 12px;
+  overflow: hidden;
+  border: 1px solid #292f3b;
+  border-radius: 8px;
+  background: #10141b;
+}
+
+.rich-sources summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  color: #9aa3b1;
+  font-size: 11px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.rich-sources summary::-webkit-details-marker { display: none; }
+.rich-sources summary::after { content: "⌄"; color: #777f8e; }
+.rich-sources[open] summary::after { content: "⌃"; }
+.rich-sources summary small { margin-left: auto; color: #8bd8d2; font: 10px var(--mono); }
+.rich-sources ul { display: grid; gap: 6px; margin: 0; padding: 0 12px 12px 28px; color: #b5bac4; font-size: 10px; line-height: 1.55; }
+.rich-sources li { overflow-wrap: anywhere; }
+.rich-sources summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: -3px; }
+
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+button:not(:disabled), summary { cursor: pointer; }
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .connection-error { max-width: 520px; }
 .retry-button { margin-top: 18px; padding: 10px 14px; border: 1px solid #39334f; border-radius: 7px; background: #191725; color: #d8d0f5; font: inherit; font-size: 12px; cursor: pointer; }
 .retry-button:hover { border-color: #7563b5; background: #201c32; }
 .retry-button:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+.activity-feed-warning { display:grid; gap:8px; margin-top:9px; padding:9px 10px; border:1px solid #574237; border-radius:7px; background:#211914; color:#dfc3b1; font-size:9px; line-height:1.55; }
+.activity-feed-warning button { justify-self:start; padding:5px 8px; border:1px solid #6a4e3e; border-radius:5px; background:#2b201a; color:#f0d5c0; font:inherit; cursor:pointer; }
+.activity-feed-warning button:hover { border-color:#b6815f; background:#35251d; }
+.activity-feed-updating { margin-top:8px; color:#8f9ba7; font-size:8px; line-height:1.55; }
+.activity-detail-error { display:flex; align-items:center; justify-content:space-between; gap:14px; max-width:680px; margin:8px auto 22px; padding:11px 13px; border:1px solid #574237; border-radius:8px; background:#211914; color:#e4c7b5; font-size:11px; line-height:1.6; }
+.activity-detail-error button { flex:none; padding:6px 9px; border:1px solid #6a4e3e; border-radius:6px; background:#2b201a; color:#f0d5c0; font:inherit; cursor:pointer; }
+.activity-detail-error button:hover:not(:disabled) { border-color:#b6815f; background:#35251d; }
+.activity-detail-error button:disabled { opacity:.6; cursor:wait; }
+@media (max-width:700px) { .activity-detail-error { align-items:flex-start; flex-direction:column; } }
+.turn-recovery-notice { display:flex; align-items:center; justify-content:space-between; gap:14px; max-width:680px; margin:8px auto 20px; padding:12px 14px; border:1px solid #574237; border-radius:8px; background:#211914; color:#e4c7b5; font-size:11px; line-height:1.55; }
+.turn-recovery-notice div { display:grid; gap:3px; }
+.turn-recovery-notice b { color:#f0d5c0; }
+.turn-recovery-notice button { flex:none; padding:7px 10px; border:1px solid #6a4e3e; border-radius:6px; background:#2b201a; color:#f0d5c0; font:inherit; cursor:pointer; }
+.turn-recovery-notice button:hover { border-color:#b6815f; background:#35251d; }
+.turn-recovery-notice button:focus-visible { outline:2px solid #d9a47b; outline-offset:2px; }
+@media (max-width:700px) { .turn-recovery-notice { align-items:flex-start; flex-direction:column; } }
 .task-card { display: block; width: 100%; color: inherit; text-align: left; font: inherit; }
 .activity-panel { min-height: 0; overflow-y: auto; overflow-x: hidden; }
 .task-section { min-width: 0; }

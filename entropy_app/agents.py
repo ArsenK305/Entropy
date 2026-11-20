@@ -11,11 +11,40 @@ MIN_OUTPUT_TOKEN_LIMIT = 300
 class DemoAgentProvider:
     mode = "local-demo"
 
-    def __init__(self, entropy_output_tokens: int = 1_200, veltrics_output_tokens: int = 800):
+    def __init__(
+        self,
+        entropy_output_tokens: int = 1_200,
+        veltrics_output_tokens: int = 800,
+        psyche_output_tokens: int = 600,
+    ):
         self.entropy_output_tokens = entropy_output_tokens
         self.veltrics_output_tokens = veltrics_output_tokens
+        self.psyche_output_tokens = psyche_output_tokens
 
-    def route_message(self, request_text: str, project_context: str = "", conversation_context: list[dict] | None = None, workspace: str = "general", output_token_limit: int | None = None) -> dict:
+    def answer_with_references(
+        self,
+        question: str,
+        references: list[dict[str, str]],
+        output_token_limit: int | None = None,
+    ) -> str:
+        """Return retrieved mock excerpts without pretending demo content is live policy."""
+        del question, output_token_limit
+        excerpts = [f"{item['title']}\n{item['content'][:650]}" for item in references[:3]]
+        return (
+            "В демо-режиме нашёл эти карточки каталога. Сведения и условия пока демонстрационные:\n\n"
+            + "\n\n".join(excerpts)
+        )
+
+    def route_message(
+        self,
+        request_text: str,
+        project_context: str = "",
+        conversation_context: list[dict] | None = None,
+        workspace: str = "general",
+        output_token_limit: int | None = None,
+        retrieved_reference_context: str = "",
+    ) -> dict:
+        del project_context, conversation_context, output_token_limit, retrieved_reference_context
         if workspace == "career":
             return {
                 "reply": "Модуль поиска работы работает только с подключённой моделью. Включи live-режим, чтобы получить разбор вакансии.",
@@ -64,6 +93,30 @@ class DemoAgentProvider:
             "и ссылки на затронутые файлы."
         )
 
+    def review_developer_task(
+        self,
+        request_text: str,
+        plan: dict,
+        developer_result: str,
+        project_context: str = "",
+        output_token_limit: int | None = None,
+    ) -> dict:
+        """Return an explicitly synthetic review without claiming model work."""
+        return {
+            "verdict": "demo_review",
+            "summary": (
+                "Синтетическая проверка: ответ Veltrics является предложением; "
+                "файлы проекта не читались и не менялись."
+            ),
+            "findings": [
+                {
+                    "severity": "info",
+                    "issue": "В демо-режиме Psyche не выполняет независимый модельный анализ.",
+                    "recommendation": "Считай вывод предварительным; live-review включается через ENTROPY_MODE=live.",
+                }
+            ],
+        }
+
 
 def build_agent_provider():
     """Use the live provider only when the user explicitly enables it."""
@@ -73,12 +126,13 @@ def build_agent_provider():
     api_key = os.environ.get("OPENAI_API_KEY", "").strip()
     entropy_output_tokens = _configured_output_limit("ENTROPY_MAX_OUTPUT_TOKENS", 1_200)
     veltrics_output_tokens = _configured_output_limit("VELTRICS_MAX_OUTPUT_TOKENS", 800)
+    psyche_output_tokens = _configured_output_limit("PSYCHE_MAX_OUTPUT_TOKENS", 600)
     if mode != "live":
-        return DemoAgentProvider(entropy_output_tokens, veltrics_output_tokens)
-    if not api_key:
+        return DemoAgentProvider(entropy_output_tokens, veltrics_output_tokens, psyche_output_tokens)
+    if not api_key or api_key.casefold() == "disabled":
         raise RuntimeError(
-            "ENTROPY_MODE is live, but OPENAI_API_KEY is missing. "
-            "Add the key to this PyCharm run configuration, or set ENTROPY_MODE=demo."
+            "ENTROPY_MODE is live, but OPENAI_API_KEY is missing or disabled. "
+            "Add the key to the local .env file, or set ENTROPY_MODE=demo."
         )
 
     from entropy_app.openai_provider import OpenAIResponsesProvider
@@ -91,6 +145,7 @@ def build_agent_provider():
         reasoning_effort=os.environ.get("ENTROPY_REASONING_EFFORT", "low").strip(),
         entropy_output_tokens=entropy_output_tokens,
         veltrics_output_tokens=veltrics_output_tokens,
+        psyche_output_tokens=psyche_output_tokens,
     )
 
 

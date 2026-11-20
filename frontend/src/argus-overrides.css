@@ -178,11 +178,65 @@
 .argus-empty-events b { color: #d8ced2; font-size: 11px; font-weight: 550; }
 .argus-empty-events small { max-width: 260px; color: #a49aa0; font-size: 10px; line-height: 1.55; }
 .argus-health.configured .health-orb, .agent-presence.active { background: #6dcea0; box-shadow: 0 0 8px #6dcea077; }
+.argus-health.configured .health-orb { background: #d3a761; box-shadow: 0 0 8px #d3a76177; }
+.argus-demo-badge.configured { border-color: #51442f; background: #211b12; color: #ddbd80; }
+.argus-demo-badge.configured i { background: #d3a761; box-shadow: 0 0 9px #d3a76177; }
 .agent-tile.failed .agent-presence { background: #e14e53; box-shadow: 0 0 8px #e14e5388; }
 .agent-tile.failed .agent-status { color: #e68c8c; }
 .argus-node .node-state { max-width: 130px; overflow: hidden; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
 .argus-node b { font-size: 9px; }
 .argus-node small { font-size: 8px; }
+
+.argus-event-group { border-top: 1px solid #ffffff0a; }
+.argus-event-group-summary {
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: 58px 65px minmax(0, 1fr) 14px;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 2px;
+  cursor: pointer;
+  list-style: none;
+}
+.argus-event-group-summary::-webkit-details-marker { display: none; }
+.argus-event-group-summary > time { color: #8b8289; font: 9px var(--mono); }
+.event-group-main { min-width: 0; }
+.event-group-main > b { display: block; overflow: hidden; color: #e5dce0; font-size: 11px; font-weight: 550; text-overflow: ellipsis; white-space: nowrap; }
+.event-group-main > small { display: block; overflow: hidden; margin-top: 4px; color: #a49aa0; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.event-group-status { justify-self: start; padding: 3px 5px; border: 1px solid #39343a; border-radius: 4px; color: #b2a8ae; font: 8px var(--mono); }
+.event-group-status.completed { border-color: #315444; background: #13251d; color: #84d3a2; }
+.event-group-status.failed { border-color: #69383b; background: #2a1518; color: #f39a9d; }
+.event-group-status.running { border-color: #4a3c5d; background: #211a2b; color: #c6a6ed; }
+.event-group-status.accepted { border-color: #365454; background: #142526; color: #91d0ce; }
+.event-group-status.waiting { border-color: #655332; background: #241f14; color: #dfbd76; }
+.event-group-chevron { color: #8a7c84; font-size: 14px; transition: transform .18s ease; }
+.argus-event-group[open] .event-group-chevron { transform: rotate(180deg); }
+.event-group-steps { margin: 0 0 8px 66px; padding: 0 8px 2px 12px; border-left: 1px solid #53454c; }
+.event-group-steps .argus-event { grid-template-columns: 55px 55px minmax(0, 1fr) 8px; min-height: 44px; border-top: 0; }
+.event-group-steps .argus-event + .argus-event { border-top: 1px solid #ffffff08; }
+.argus-event-count { white-space: nowrap; }
+
+.argus-trace-card { margin-bottom: 12px; overflow: hidden; }
+.argus-trace-body { padding: 0 17px 15px; }
+.argus-trace-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border: 1px solid #373037; border-radius: 5px; background: #171316; }
+.argus-trace-summary b { overflow: hidden; color: #f0e8eb; font-size: 12px; font-weight: 550; text-overflow: ellipsis; white-space: nowrap; }
+.argus-trace-summary small { flex: 0 0 auto; color: #9b9097; font: 8px var(--mono); }
+.argus-trace-steps { display: grid; gap: 0; margin: 11px 0 0; padding: 0; list-style: none; }
+.argus-trace-step { min-height: 49px; display: grid; grid-template-columns: 22px minmax(0, 1fr) 110px 62px; align-items: center; gap: 10px; position: relative; }
+.argus-trace-step:not(:last-child)::after { content: ""; position: absolute; left: 10px; top: 34px; bottom: -8px; width: 1px; background: #42373d; }
+.argus-trace-marker { width: 20px; height: 20px; display: grid; place-items: center; z-index: 1; border: 1px solid #49534c; border-radius: 50%; background: #17231c; color: #83d2a0; font: 10px var(--mono); }
+.argus-trace-step.failed .argus-trace-marker { border-color: #754044; background: #2b171a; color: #f28f94; }
+.argus-trace-step.pending .argus-trace-marker { border-color: #51456a; background: #211b2b; color: #c4a3ed; }
+.argus-trace-step-copy { min-width: 0; }
+.argus-trace-step-copy b { display: block; overflow: hidden; color: #ded5d9; font-size: 10px; font-weight: 550; text-overflow: ellipsis; white-space: nowrap; }
+.argus-trace-step-copy small { display: block; overflow: hidden; margin-top: 3px; color: #938991; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.argus-trace-source { overflow: hidden; color: #b295be; font: 8px var(--mono); letter-spacing: .5px; text-overflow: ellipsis; }
+.argus-trace-step time { color: #8b8289; font: 8px var(--mono); text-align: right; }
+.argus-trace-empty { min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; padding: 16px; border-top: 1px solid #ffffff0a; text-align: center; }
+.argus-trace-empty span { color: #d5b475; font: 9px var(--mono); letter-spacing: 1px; }
+.argus-trace-empty small { max-width: 360px; color: #9d9399; font-size: 10px; line-height: 1.5; }
+.argus-lower-grid { grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr); }
+.argus-flow-card { margin-top: 12px; opacity: .93; }
 
 @media (max-width: 1100px) {
   .argus-lower-grid { grid-template-columns: 1fr; }
@@ -190,14 +244,26 @@
 }
 
 @media (max-width: 760px) {
+  .argus-shell, .argus-layout, .argus-main { width: 100%; max-width: 100%; min-width: 0; }
+  .argus-shell { overflow-x: hidden; }
   .argus-brand-name { font-size: 16px; }
   .argus-demo-badge.offline { display: none; }
   .argus-back { display: flex; padding: 6px 7px; font-size: 9px; }
   .argus-main { max-height: calc(100dvh - 54px); scroll-padding-top: 12px; }
   .argus-event-list { max-height: 340px; padding-right: 10px; padding-left: 10px; }
+  .argus-trace-body { padding: 0 12px 12px; }
+  .argus-trace-summary { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .argus-trace-step { grid-template-columns: 22px minmax(0, 1fr) 52px; gap: 7px; }
+  .argus-trace-source { grid-column: 2; grid-row: 2; align-self: start; padding-bottom: 6px; font-size: 7px; }
+  .argus-trace-step time { grid-column: 3; grid-row: 1; font-size: 7px; }
+  .argus-trace-step-copy { padding: 7px 0 0; }
+  .argus-trace-step-copy small { white-space: normal; line-height: 1.35; }
+  .argus-trace-step:not(:last-child)::after { bottom: -3px; }
   .argus-event { grid-template-columns: 54px 62px minmax(0, 1fr) 8px; gap: 6px; }
   .argus-load-error { margin: 0 0 12px; }
   .argus-flow-canvas { height: 435px; grid-template-rows: repeat(4, 1fr); }
+  .events-card .argus-card-head { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .events-card .argus-event-count { max-width: 100%; white-space: normal; line-height: 1.4; }
   .node-telegram { grid-column: 1; grid-row: 1; }
   .node-entropy { grid-column: 2; grid-row: 1; }
   .node-n8n { grid-column: 1; grid-row: 2; transform: none; }
@@ -208,8 +274,26 @@
   .node-redshift { grid-column: 1; grid-row: 4; }
 }
 
+@media (max-width: 520px) {
+  .argus-shell { width: 100vw; max-width: 100vw; }
+  .argus-layout, .argus-main, .argus-trace-card, .argus-metrics { width: 100%; max-width: 100%; min-width: 0; }
+  .argus-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .argus-metric { min-width: 0; }
+  .argus-back { display: none; }
+  .argus-topbar { grid-template-columns: minmax(0, 1fr) auto; }
+}
+
 @media (max-width: 380px) {
+  .argus-trace-step { grid-template-columns: 20px minmax(0, 1fr) 46px; gap: 5px; }
   .argus-event { grid-template-columns: 48px 54px minmax(0, 1fr) 7px; gap: 4px; }
   .argus-event time { font-size: 8px; }
   .argus-event .event-type { font-size: 7px; }
+  .argus-event-group-summary { grid-template-columns: 48px 58px minmax(0, 1fr) 10px; gap: 5px; }
+  .argus-event-group-summary > time { font-size: 8px; }
+  .event-group-status { font-size: 7px; }
+  .event-group-main > b { font-size: 10px; }
+  .event-group-main > small { font-size: 8px; }
+  .events-card .argus-event-count { max-width: 112px; white-space: normal; text-align: right; line-height: 1.4; }
+  .event-group-steps { margin-left: 50px; padding-left: 8px; }
+  .event-group-steps .argus-event { grid-template-columns: 48px 50px minmax(0, 1fr) 7px; gap: 4px; }
 }

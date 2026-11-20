@@ -5,7 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && npm run check:interactions && npm run test:career-ui && npm run test:career-import && npm run test:text-formatting && npm run test:task-ui && npm run test:api && npm run test:argus && npm run test:observability && npm run test:navigation && vite build",
+    "check:interactions": "node scripts/check-interactions.cjs",
+    "test:api": "node scripts/test-api.cjs",
+    "test:argus": "node scripts/test-argus-utils.cjs",
+    "test:observability": "node scripts/test-observability-utils.cjs",
+    "test:career-ui": "node scripts/test-career-applications.cjs",
+    "test:career-import": "node scripts/test-career-import.cjs",
+    "test:text-formatting": "node scripts/test-text-formatting.cjs",
+    "test:task-ui": "node scripts/test-task-workspace.cjs",
+    "test:navigation": "node scripts/test-workspace-navigation.cjs",
     "typecheck": "tsc -b --pretty"
   },
   "dependencies": {

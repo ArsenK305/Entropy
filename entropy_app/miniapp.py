@@ -6,31 +6,32 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import time
 from urllib.parse import parse_qsl
 
 
 CATALOG = (
     {
-        "id": "python-api",
-        "title": "Собираем API, которому можно доверять",
-        "description": "Практический маршрут от первого endpoint до надёжного Python-сервиса.",
-        "tag": "PYTHON · FASTAPI · 6 УРОКОВ",
-        "cover": "api",
+        "id": "entropy-box",
+        "title": "Entropy Box",
+        "description": "Базовая концепция Entropy. Формат и состав пока не определены.",
+        "tag": "БАЗОВАЯ КОНЦЕПЦИЯ · MOCK",
+        "cover": "box",
     },
     {
-        "id": "rag-basics",
-        "title": "RAG без магии",
-        "description": "Поиск контекста, проверка источников и честные ответы модели.",
-        "tag": "LLM · ПОИСК · 4 УРОКА",
+        "id": "career-module-candidate",
+        "title": "Карьерный модуль",
+        "description": "Кандидат на отдельный модуль: разбор вакансий и черновики ответов по профилю. Не готовая услуга.",
+        "tag": "МОДУЛЬ-КАНДИДАТ · MOCK",
+        "cover": "career",
+    },
+    {
+        "id": "knowledge-module-candidate",
+        "title": "Модуль знаний (RAG)",
+        "description": "Кандидат на отдельный модуль: поиск по выбранным документам с указанием источников.",
+        "tag": "МОДУЛЬ-КАНДИДАТ · MOCK",
         "cover": "rag",
-    },
-    {
-        "id": "agent-workflows",
-        "title": "Агенты и рабочие потоки",
-        "description": "Роли, передача задач и понятная автоматизация на примерах.",
-        "tag": "АГЕНТЫ · n8n · 5 УРОКОВ",
-        "cover": "workflows",
     },
 )
 PRODUCTS_BY_ID = {product["id"]: product for product in CATALOG}
@@ -54,6 +55,8 @@ def telegram_user_id(init_data: str, bot_token: str, max_age_seconds: int = 86_4
     received_hash = values.pop("hash", None)
     if not received_hash:
         raise ValueError("Telegram data has no validation hash.")
+    if not re.fullmatch(r"[0-9a-f]{64}", received_hash):
+        raise ValueError("Telegram data validation hash is malformed.")
     data_check_string = "\n".join(f"{key}={value}" for key, value in sorted(values.items()))
     secret_key = hmac.new(b"WebAppData", bot_token.encode("utf-8"), hashlib.sha256).digest()
     expected_hash = hmac.new(secret_key, data_check_string.encode("utf-8"), hashlib.sha256).hexdigest()

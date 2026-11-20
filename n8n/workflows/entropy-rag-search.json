@@ -1,0 +1,139 @@
+{
+  "name": "Entropy — RAG search",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "entropy-rag-search",
+        "responseMode": "responseNode",
+        "options": {},
+        "authentication": "headerAuth"
+      },
+      "id": "25fb3273-4b55-41da-8fed-d0ca24d73364",
+      "name": "Search trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "entropy-rag-search"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst body = input.body ?? input;\nconst scope = body.scope;\nconst question = typeof body.question === 'string' ? body.question.trim() : '';\nif (!['career', 'entropy_product'].includes(scope)) throw new Error('scope must be career or entropy_product');\nif (!question || question.length > 2000) throw new Error('question must contain 1-2000 characters');\nreturn [{ json: { scope, question, qdrantBody: { query: { text: 'query: ' + question, model: 'intfloat/multilingual-e5-small' }, filter: { must: [{ key: 'scope', match: { value: scope } }] }, limit: 5, with_payload: true } } }];"
+      },
+      "id": "b40575cc-16f0-476c-97b9-3b8393411c34",
+      "name": "Validate and build query",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://00d43631-31e8-48d4-93de-0259a4f86d6f.eu-central-1-0.aws.cloud.qdrant.io/collections/entropy_knowledge/points/query",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.qdrantBody }}",
+        "options": {}
+      },
+      "id": "5b23811c-a5c3-49ba-bc55-da18dd4ab641",
+      "name": "Search Qdrant",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const request = $('Validate and build query').first().json;\nconst input = $input.first().json;\nconst response = input.result?.points ?? input.result ?? [];\nconst results = (Array.isArray(response) ? response : []).map((point) => ({ score: point.score, source_id: point.payload?.source_id ?? null, title: point.payload?.title ?? null, content: point.payload?.content ?? null, scope: point.payload?.scope ?? null, kind: point.payload?.kind ?? null, source_url: point.payload?.source_url ?? null }));\nreturn [{ json: { ok: true, scope: request.scope, question: request.question, results } }];"
+      },
+      "id": "cbd2023b-4b7e-4682-ad64-64a9cf768be3",
+      "name": "Format cited results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "92e7da03-a6c2-4a1c-935d-5a79e432f7d4",
+      "name": "Search response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1200,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Search trigger": {
+      "main": [
+        [
+          {
+            "node": "Validate and build query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate and build query": {
+      "main": [
+        [
+          {
+            "node": "Search Qdrant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Qdrant": {
+      "main": [
+        [
+          {
+            "node": "Format cited results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format cited results": {
+      "main": [
+        [
+          {
+            "node": "Search response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "07848617-fc0f-4a2c-98e1-3a3366519c10",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

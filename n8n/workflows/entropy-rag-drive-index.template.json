@@ -1,0 +1,428 @@
+{
+  "name": "Entropy — RAG Drive index (template)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "df0f184d-b3fe-4463-ba2f-a0067cee3187",
+      "name": "Manual start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        96,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "(mimeType = 'application/vnd.google-apps.document' or mimeType = 'text/plain' or mimeType = 'text/markdown')",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "REPLACE_WITH_CAREER_FOLDER_ID",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "includeTrashed": false
+        },
+        "options": {
+          "fields": [
+            "id",
+            "name",
+            "mimeType",
+            "webViewLink",
+            "version"
+          ]
+        }
+      },
+      "id": "c49470f8-3538-45fe-8d76-5d4041eaa3a0",
+      "name": "Find career documents",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        336,
+        -208
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().filter(item => typeof item.json?.id === 'string').map(item => ({ json: { ...item.json, scope: 'career' } }));"
+      },
+      "id": "3322f772-b0cf-498a-8c3f-941750b37856",
+      "name": "Mark career scope",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        -208
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {
+          "binaryPropertyName": "data",
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "text/plain"
+            }
+          }
+        }
+      },
+      "id": "e21257a6-486a-4698-a9f9-0802396a9c7e",
+      "name": "Download career document",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        816,
+        -208
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "(mimeType = 'application/vnd.google-apps.document' or mimeType = 'text/plain' or mimeType = 'text/markdown')",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "REPLACE_WITH_ENTROPY_PRODUCT_FOLDER_ID",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "includeTrashed": false
+        },
+        "options": {
+          "fields": [
+            "id",
+            "name",
+            "mimeType",
+            "webViewLink",
+            "version"
+          ]
+        }
+      },
+      "id": "4376378a-7e57-472b-8269-b528ae8274ed",
+      "name": "Find product documents",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        336,
+        48
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().filter(item => typeof item.json?.id === 'string').map(item => ({ json: { ...item.json, scope: 'entropy_product' } }));"
+      },
+      "id": "a7b162bc-1a8b-4b58-9d87-17b181ef56f1",
+      "name": "Mark product scope",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {
+          "binaryPropertyName": "data",
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "text/plain"
+            }
+          }
+        }
+      },
+      "id": "3ff14fdd-f99a-488e-924e-be984d170fa6",
+      "name": "Download product document",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        816,
+        48
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "998ef1c6-4151-4c72-99f6-45a50461869f",
+      "name": "Combine scopes",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1056,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "destinationKey": "extractedText",
+        "options": {
+          "encoding": "utf8",
+          "stripBOM": true,
+          "keepSource": "json"
+        }
+      },
+      "id": "e2dd02b7-d35c-463e-8528-348a3b2e7ba9",
+      "name": "Extract text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        1296,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function newUuid() {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {\n    const r = Math.floor(Math.random() * 16);\n    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);\n  });\n}\nfunction stableUuid(value) {\n  const seeds = [2166136261, 2246822519, 3266489917, 668265263];\n  const parts = seeds.map((seed, seedIndex) => {\n    let hash = seed >>> 0;\n    const input = seedIndex + ':' + value;\n    for (let i = 0; i < input.length; i++) {\n      hash ^= input.charCodeAt(i);\n      hash = Math.imul(hash, 16777619) >>> 0;\n      hash ^= hash >>> 13;\n    }\n    return hash.toString(16).padStart(8, '0');\n  });\n  let hex = parts.join('');\n  hex = hex.slice(0, 12) + '4' + hex.slice(13);\n  const variant = ((parseInt(hex[16], 16) & 3) | 8).toString(16);\n  hex = hex.slice(0, 16) + variant + hex.slice(17);\n  return hex.slice(0, 8) + '-' + hex.slice(8, 12) + '-' + hex.slice(12, 16) + '-' + hex.slice(16, 20) + '-' + hex.slice(20);\n}\n\nconst output = [];\nfor (const item of $input.all()) {\n  const file = item.json ?? {};\n  const scope = file.scope;\n  const sourceId = typeof file.id === 'string' ? file.id : '';\n  const title = typeof file.name === 'string' ? file.name : 'Без названия';\n  const text = typeof file.extractedText === 'string' ? file.extractedText.trim() : '';\n  if (!sourceId || !['career', 'entropy_product'].includes(scope) || !text) continue;\n\n  const chunks = [];\n  const chunkSize = 2200;\n  const overlap = 250;\n  let start = 0;\n  while (start < text.length) {\n    let end = Math.min(start + chunkSize, text.length);\n    if (end < text.length) {\n      const boundary = text.lastIndexOf(' ', end);\n      if (boundary > start + Math.floor(chunkSize * 0.6)) end = boundary;\n    }\n    const content = text.slice(start, end).trim();\n    if (content) chunks.push(content);\n    if (end >= text.length) break;\n    start = Math.max(start + 1, end - overlap);\n  }\n\n  const points = chunks.map((content, index) => ({\n    id: newUuid(),\n    vector: { text: 'passage: ' + content, model: 'intfloat/multilingual-e5-small' },\n    payload: {\n      scope,\n      source_id: sourceId,\n      title,\n      content,\n      kind: 'drive',\n      file_id: sourceId,\n      file_name: title,\n      source_url: file.webViewLink ?? null,\n      modified_time: file.modifiedTime ?? null,\n      source_version: file.version ?? null,\n      chunk_index: index\n    }\n  }));\n  if (points.length) output.push({ json: { source_id: sourceId, scope, title, points, chunk_count: points.length } });\n}\nreturn output;"
+      },
+      "id": "f4d2ce13-a009-4623-b389-97a459d1387d",
+      "name": "Chunk and prepare points",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://00d43631-31e8-48d4-93de-0259a4f86d6f.eu-central-1-0.aws.cloud.qdrant.io/collections/entropy_knowledge/points/delete?wait=true",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { filter: { must: [{ key: 'source_id', match: { value: $json.source_id } }] } } }}",
+        "options": {}
+      },
+      "id": "27879a4e-139d-4081-b0ef-47a80deb355f",
+      "name": "Remove previous chunks for each file",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1776,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const files = $('Chunk and prepare points').all().map(item => item.json);\nconst points = files.flatMap(file => file.points ?? []);\nreturn [{ json: { file_count: files.length, chunk_count: points.length, scopes: [...new Set(files.map(file => file.scope))], points } }];"
+      },
+      "id": "a8c2912d-b6f2-4b5b-b303-0dbe0bf1180b",
+      "name": "Collect points",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "https://00d43631-31e8-48d4-93de-0259a4f86d6f.eu-central-1-0.aws.cloud.qdrant.io/collections/entropy_knowledge/points?wait=true",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { points: $json.points } }}",
+        "options": {}
+      },
+      "id": "04617ddb-2507-4237-9f9a-969be648ea5d",
+      "name": "Upsert Drive points",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2256,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const counts = $('Collect points').first().json;\nconst result = $input.first().json;\nreturn [{ json: { ok: true, indexed_files: counts.file_count, indexed_chunks: counts.chunk_count, scopes: counts.scopes, qdrant_status: result.result?.status ?? null } }];"
+      },
+      "id": "693d4004-02f4-412f-be74-a6505c39a0e5",
+      "name": "Indexing summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2496,
+        -80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual start": {
+      "main": [
+        [
+          {
+            "node": "Find career documents",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Find product documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find career documents": {
+      "main": [
+        [
+          {
+            "node": "Mark career scope",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark career scope": {
+      "main": [
+        [
+          {
+            "node": "Download career document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download career document": {
+      "main": [
+        [
+          {
+            "node": "Combine scopes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find product documents": {
+      "main": [
+        [
+          {
+            "node": "Mark product scope",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark product scope": {
+      "main": [
+        [
+          {
+            "node": "Download product document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download product document": {
+      "main": [
+        [
+          {
+            "node": "Combine scopes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Combine scopes": {
+      "main": [
+        [
+          {
+            "node": "Extract text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract text": {
+      "main": [
+        [
+          {
+            "node": "Chunk and prepare points",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk and prepare points": {
+      "main": [
+        [
+          {
+            "node": "Remove previous chunks for each file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove previous chunks for each file": {
+      "main": [
+        [
+          {
+            "node": "Collect points",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect points": {
+      "main": [
+        [
+          {
+            "node": "Upsert Drive points",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Drive points": {
+      "main": [
+        [
+          {
+            "node": "Indexing summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  }
+}

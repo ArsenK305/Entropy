@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: entropy-backend
+  namespace: entropy-demo
+spec:
+  selector:
+    app: entropy-backend
+  ports:
+    - name: http
+      port: 8765
+      targetPort: 8765
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: entropy-backend
+  namespace: entropy-demo
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: entropy-backend
+  template:
+    metadata:
+      labels:
+        app: entropy-backend
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: backend
+          image: entropy/backend:local
+          imagePullPolicy: Never
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - name: http
+              containerPort: 8765
+          envFrom:
+            - configMapRef:
+                name: entropy-demo-config
+          env:
+            - name: ENTROPY_DEMO_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: entropy-demo-db
+                  key: username
+            - name: ENTROPY_DEMO_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: entropy-demo-db
+                  key: password
+            - name: ENTROPY_DATABASE_URL
+              value: postgresql+psycopg://$(ENTROPY_DEMO_DB_USER):$(ENTROPY_DEMO_DB_PASSWORD)@postgres:5432/entropy_demo
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            periodSeconds: 3
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 2
+          resources:
+            requests:
+              cpu: 100m
+              memory: 192Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+

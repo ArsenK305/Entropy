@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: entropy-demo-config
+  namespace: entropy-demo
+data:
+  ENTROPY_MODE: "demo"
+  ENTROPY_HOST: "0.0.0.0"
+  ENTROPY_PORT: "8765"
+  ENTROPY_MINIAPP_PREVIEW: "1"
+  ENTROPY_TELEGRAM_POLLING: "0"
+  TELEGRAM_BOT_TOKEN: ""
+  TELEGRAM_MINIAPP_URL: ""
+  ENTROPY_N8N_WEBHOOK_URL: ""
+  ENTROPY_N8N_EVENT_TOKEN: ""
+  ENTROPY_RAG_SEARCH_WEBHOOK_URL: ""
+  ENTROPY_RAG_WEBHOOK_TOKEN: ""
+  OPENAI_API_KEY: ""
+
